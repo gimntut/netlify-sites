@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
@@ -12,10 +12,11 @@
 </head>
 
 <body>
-    <div id="container"></div>
-    <template id="ui">
+  <div id="container"></div>
+  <script id="ui" language="text/yaml">
     container: container
     view: multiview
+    id: pages
     cells:
     - id: step1
       rows:
@@ -24,15 +25,57 @@
         template: Страница 1. Подготовка
       - view: template
         autoheight: on
-        template: fgfghd
+        template: Вставьте html-исходники
       - view: textarea
+        id: original
+        height: 400
+        # placeholder: Вставьте html-исходники
       - cols:
-        - autofill: true
+        - fillspace: true
         - view: button
           label: Далее
+          width: 100
+          'on':
+            onItemClick: func:> step2
     - id: step2
+      rows:
+      - view: template
+        type: header
+        template: Страница 2. Перевод
+      - view: template
+        autoheight: on
+        template: Переведите страницу средствами браузера
+      - view: template
+        id: textForTranslate
+        template: <div id="text-for-translate">#original#</div>
+        autoheight: true
+      - cols:
+        - fillspace: true
+        - view: button
+          label: Далее
+          width: 100
+          'on':
+            onItemClick: func:> step3
     - id: step3
-    </template>
-<div id="container"></div></body>
+      rows:
+      - view: template
+        type: header
+        template: Страница 3. Результат
+      - view: template
+        autoheight: on
+        template: <b>Disable translate.</b> Скопируйте html-исходники
+      - id: result
+        view: textarea
+        height: 400
+      - cols:
+        - fillspace: true
+        - view: button
+          label: К началу
+          width: 100
+          'on':
+            onItemClick: func:> step1
+  </script>
+  <div id="container"></div>
+</body>
 
 </html>
