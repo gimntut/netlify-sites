@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Html source translator</title>
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
+    <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+    <script src="https://lib.arvancloud.com/ar/js-yaml/3.9.1/js-yaml.js"></script>
+    <script src="/webix-ext.js" type="text/javascript"></script>
+    <script src="/ui.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="container"></div>
+    <template id="ui">
+    container: container
+    view: multiview
+    cells:
+    - id: step1
+      rows:
+      - view: template
+        type: header
+        template: Страница 1. Подготовка
+      - view: template
+        autoheight: on
+        template: fgfghd
+      - view: textarea
+      - cols:
+        - autofill: true
+        - view: button
+          label: Далее
+    - id: step2
+    - id: step3
+    </template>
+<div id="container"></div></body>
+
+</html>
