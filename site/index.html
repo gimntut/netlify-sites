@@ -7,11 +7,17 @@
     <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
     <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
     <script src="https://lib.arvancloud.com/ar/js-yaml/3.9.1/js-yaml.js"></script>
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="/webix-ext.js" type="text/javascript"></script>
     <script src="/ui.js" type="text/javascript"></script>
 </head>
 
 <body>
+  <style type="text/css">
+    .no-translate:before {
+      content: attr(data-text);
+    }
+  </style>
   <div id="container"></div>
   <script id="ui" language="text/yaml">
     container: container
@@ -22,29 +28,29 @@
       rows:
       - view: template
         type: header
-        template: Шаг 1 из 3. Ввод текста для перевода
+        template: <span class="no-translate" data-text="Шаг 1 из 3. Ввод текста для перевода"></span>
       - view: template
         autoheight: on
-        template: Вставьте html-исходники в поле ввода
+        template: <span class="no-translate" data-text="Вставьте html-исходники в поле ввода"></span>
       - view: textarea
         id: original
         height: 400
       - cols:
         - fillspace: true
         - view: button
-          type: htmlbutton
-          label: Далее
-          width: 100
+          type: iconButton
+          icon: arrow-right
+          width: 40
           'on':
             onItemClick: func:> step2
     - id: step2
       rows:
       - view: template
         type: header
-        template: Шаг 2 из 3. Выполнить перевод
+        template: <span class="no-translate" data-text="Шаг 2 из 3. Выполнить перевод"></span>
       - view: template
         autoheight: on
-        template: Переведите страницу средствами браузера
+        template: <span class="no-translate" data-text="Переведите страницу средствами браузера."></span> <b class="no-translate" data-text="Обязательно"></b> <span class="no-translate" data-text="дождитесь окончания перевода"></span>
       - view: template
         id: textForTranslate
         template: <div id="text-for-translate">#original#</div>
@@ -52,28 +58,28 @@
       - cols:
         - fillspace: true
         - view: button
-          type: htmlbutton
-          label: Далее
-          width: 100
+          type: iconButton
+          icon: arrow-right
+          width: 40
           'on':
             onItemClick: func:> step3
     - id: step3
       rows:
       - view: template
         type: header
-        template: Шаг 3 из 3. Забрать результат
+        template: <span class="no-translate" data-text="Шаг 3 из 3. Забрать результат"></span>
       - view: template
         autoheight: on
-        template: <b>Disable translate.</b> Скопируйте html-исходники
+        template: <span class="no-translate" data-text="Скопируйте html-исходники из поля ввода"></span>
       - id: result
         view: textarea
         height: 400
       - cols:
         - fillspace: true
         - view: button
-          type: htmlbutton
-          label: К началу
-          width: 100
+          type: iconButton
+          icon: angle-double-left
+          width: 40
           'on':
             onItemClick: func:> step1
   </script>
