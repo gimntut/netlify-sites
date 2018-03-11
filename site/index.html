@@ -22,17 +22,17 @@
       rows:
       - view: template
         type: header
-        template: Страница 1. Подготовка
+        template: Шаг 1 из 3. Ввод текста для перевода
       - view: template
         autoheight: on
-        template: Вставьте html-исходники
+        template: Вставьте html-исходники в поле ввода
       - view: textarea
         id: original
         height: 400
-        # placeholder: Вставьте html-исходники
       - cols:
         - fillspace: true
         - view: button
+          type: htmlbutton
           label: Далее
           width: 100
           'on':
@@ -41,7 +41,7 @@
       rows:
       - view: template
         type: header
-        template: Страница 2. Перевод
+        template: Шаг 2 из 3. Выполнить перевод
       - view: template
         autoheight: on
         template: Переведите страницу средствами браузера
@@ -52,6 +52,7 @@
       - cols:
         - fillspace: true
         - view: button
+          type: htmlbutton
           label: Далее
           width: 100
           'on':
@@ -60,7 +61,7 @@
       rows:
       - view: template
         type: header
-        template: Страница 3. Результат
+        template: Шаг 3 из 3. Забрать результат
       - view: template
         autoheight: on
         template: <b>Disable translate.</b> Скопируйте html-исходники
@@ -70,6 +71,7 @@
       - cols:
         - fillspace: true
         - view: button
+          type: htmlbutton
           label: К началу
           width: 100
           'on':
