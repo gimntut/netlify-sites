@@ -1,0 +1,8 @@
+#content {
+	width: 98vw;
+	height: 98vh;
+	font-size: 6rem;
+	padding: calc(50vh - 3rem) 0 0 0;
+	box-sizing: border-box;
+	text-align: center;
+}
