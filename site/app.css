@@ -1,8 +1,33 @@
 #content {
-	width: 98vw;
-	height: 98vh;
-	font-size: 6rem;
-	padding: calc(50vh - 3rem) 0 0 0;
-	box-sizing: border-box;
-	text-align: center;
+    width: 98vw;
+    height: 98vh;
+}
+
+#content>div {
+    display: none;
+    height: 100%;
+}
+
+#content.screen-1>.screen-1 {
+    display: block;
+    font-size: 6rem;
+    padding: calc(50vh - 3rem) 0 0 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#content.screen-2>.screen-2 {
+    display: block;
+    font-size: 6rem;
+    padding: calc(50vh - 3rem) 0 0 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#content.screen-3>.screen-3 {
+    display: block;
+    font-size: 6rem;
+    padding: calc(50vh - 3rem) 0 0 0;
+    box-sizing: border-box;
+    text-align: center;
 }
