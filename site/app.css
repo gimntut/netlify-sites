@@ -1,6 +1,6 @@
 #content {
     width: 98vw;
-    height: 98vh;
+    height: calc(98vh - 200px);
 }
 
 #content>div {
@@ -11,7 +11,7 @@
 #content.screen-1>.screen-1 {
     display: block;
     font-size: 6rem;
-    padding: calc(50vh - 3rem) 0 0 0;
+    padding: calc(48vh - 3rem - 100px) 0 0 0;
     box-sizing: border-box;
     text-align: center;
 }
@@ -27,7 +27,7 @@
 #content.screen-3>.screen-3 {
     display: block;
     font-size: 6rem;
-    padding: calc(50vh - 3rem) 0 0 0;
+    padding: calc(48vh - 3rem - 100px) 0 0 0;
     box-sizing: border-box;
     text-align: center;
 }

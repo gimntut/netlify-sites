@@ -82,7 +82,16 @@ var app = (function() {
             },
         }
     };
-    var content, screen1, screen2, screen3, tout1, int1, time;
+    var elements = {
+        content: null,
+        screen1: null,
+        screen2: null,
+        screen3: null,
+        timer: null,
+        teacherMoney: null,
+        pupilMoney: null
+    };
+    var tout1, int1, time;
 
     function screen(scrNum) {
         var screens = [1, 2, 3];
@@ -96,10 +105,9 @@ var app = (function() {
 
     return {
         run: function() {
-            content = document.getElementById('content');
-            screen1 = document.getElementById('screen1');
-            screen2 = document.getElementById('screen2');
-            screen3 = document.getElementById('screen3');
+            for (key in elements) {
+                elements[key] = document.getElementById(key);
+            }
             game.init();
             screen(1);
             this.getText();
@@ -107,7 +115,7 @@ var app = (function() {
         },
         getText: function() {
             var text = game.getText();
-            screen1.innerText = text;
+            elements.screen1.innerText = text;
             this.runTimer(game.levelTime);
         },
         runTimer: function(t) {
@@ -119,7 +127,7 @@ var app = (function() {
                 clearInterval(int1);
                 screen(2);
             }
-            document.title = time;
+            elements.timer.innerText = ['Осталось ', time, ' сек'].join('');
             time -= 1;
         },
     }
