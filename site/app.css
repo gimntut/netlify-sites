@@ -6,7 +6,6 @@
 #content>div {
     display: none;
     height: 100%;
-    padding: calc(48vh - 3rem - 100px) 0 0 0;
 }
 
 #content.screen-1>.screen-1 {
@@ -38,6 +37,11 @@
 #timer {
     color: white;
     font-size: 40px;
+}
+
+#question,
+#question2 {
+    padding: calc(20vh - 3rem - 100px) 0 0 0;
 }
 
 #question2 {
