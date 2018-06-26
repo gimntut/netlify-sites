@@ -13,13 +13,14 @@ var app = (function() {
         max_value: 0,
         level: 1,
         rules: [],
-        levelTime: 30,
+        levelTime: 3,
         pupilMoney: 10,
         teacherMoney: 10,
         init: function(app) {
             this.app = app;
-            this.teacherMoney = 10;
+            // this.teacherMoney = 10;
             this.rules = [];
+            this.max_value = 0;
             this.add(rule_1(), 100)
         },
         add: function(rule, chance) {
@@ -85,13 +86,38 @@ var app = (function() {
     var elements = {
         content: null,
         screen1: null,
+        question: null,
         screen2: null,
+        question2: null,
         screen3: null,
         timer: null,
         teacherMoney: null,
-        pupilMoney: null
+        pupilMoney: null,
+        gameover: null,
     };
     var tout1, int1, time;
+
+    function money(n) {
+        result = []
+        while (n >= 100) {
+            result.push('<div class="rubin"></div>');
+            n -= 100;
+        }
+        while (n >= 10) {
+            result.push('<div class="gold"></div>');
+            n -= 10;
+        }
+        while (n > 0) {
+            result.push('<div class="silver"></div>');
+            n -= 1;
+        }
+        return result.join('\n');
+    }
+
+    function showMoney() {
+        elements.pupilMoney.innerHTML = '<div class="pupil"></div>' + money(game.pupilMoney);
+        elements.teacherMoney.innerHTML = '<div class="teacher"></div>' + money(game.teacherMoney);
+    }
 
     function screen(scrNum) {
         var screens = [1, 2, 3];
@@ -103,6 +129,13 @@ var app = (function() {
         content.classList.add('screen-' + scrNum);
     }
 
+    function stopTimer() {
+        if (int1 != 0) {
+            clearInterval(int1);
+            int1 = 0;
+            elements.timer.innerText = ' ';
+        }
+    }
     return {
         run: function() {
             for (key in elements) {
@@ -110,25 +143,77 @@ var app = (function() {
             }
             game.init();
             screen(1);
+            showMoney();
             this.getText();
 
         },
         getText: function() {
             var text = game.getText();
-            elements.screen1.innerText = text;
+            elements.question.innerText = text;
+            elements.question2.innerText = text;
             this.runTimer(game.levelTime);
         },
         runTimer: function(t) {
+            stopTimer();
             time = t;
             int1 = setInterval(this.timer, 1000);
         },
         timer: function() {
             if (time === 0) {
-                clearInterval(int1);
+                stopTimer();
                 screen(2);
+            } else {
+                elements.timer.innerText = ['Осталось ', time, ' сек'].join('');
             }
-            elements.timer.innerText = ['Осталось ', time, ' сек'].join('');
             time -= 1;
+        },
+        pupilWin: function() {
+            game.pupilMoney += 1;
+            game.teacherMoney -= 1;
+            showMoney();
+            this.levelUp();
+        },
+        teacherWin: function() {
+            game.pupilMoney -= 1;
+            game.teacherMoney += 1;
+            showMoney();
+            this.levelUp();
+        },
+        levelUp: function() {
+            if (game.pupilMoney === 0 || game.teacherMoney === 0) {
+                this.gameOver();
+                return;
+            }
+            game.levelUp();
+            this.getText();
+            screen(1);
+            this.runTimer(game.levelTime);
+        },
+        gameOver: function() {
+            if (game.pupilMoney === 0) {
+                elements.gameover.innerHTML = [
+                    'Выиграл ',
+                    '<div class="teacher"></div>',
+                    'учитель'
+                ].join('');
+            }
+            if (game.teacherMoney === 0) {
+                elements.gameover.innerHTML = [
+                    'Выиграл ',
+                    '<div class="pupil"></div>',
+                    'ученик'
+                ].join('');
+            }
+            stopTimer();
+            screen(3);
+        },
+        restart: function() {
+            game.init();
+            game.pupilMoney = game.pupilMoney === 0 ? 10 : game.pupilMoney;
+            game.teacherMoney = game.teacherMoney === 0 ? 10 : game.teacherMoney;
+            screen(1);
+            showMoney();
+            this.getText();
         },
     }
 })();

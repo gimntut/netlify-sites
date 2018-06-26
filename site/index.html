@@ -10,14 +10,27 @@
 
 <body>
     <div id="content">
-        <div id="screen1" class="screen-1">test</div>
-        <div id="screen2" class="screen-2">2</div>
-        <div id="screen3" class="screen-3">3</div>
+        <div id="help" class="screen-0">test</div>
+        <div id="screen1" class="screen-1">
+            <div class="help-1"></div>
+            <div id="question"></div>
+            <button onclick="app.pupilWin()">Отдать деньги</button>
+        </div>
+        <div id="screen2" class="screen-2">
+            <div class="help-2"></div>
+            <div id="question2"></div>
+            <button onclick="app.pupilWin()">Отдать деньги</button>
+            <button onclick="app.teacherWin()">Забрать деньги</button>
+        </div>
+        <div id="screen3" class="screen-3">
+            <div id="gameover">Игра окончена</div>
+            <button onclick="app.restart()">Сыграть ещё</button>
+        </div>
     </div>
-    <div>
-    	<div id="timer"></div>
-    	<div id="teacherMoney"></div>
-    	<div id="puppilMoney"></div>
+    <div id="status">
+        <div id="teacherMoney"></div>
+        <div id="pupilMoney"></div>
+        <div id="timer">&nbsp;</div>
     </div>
 </body>
 
