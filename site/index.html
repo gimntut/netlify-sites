@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Таймер</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+</head>
+
+<body>
+    <div class="content"></div>
+    <script>
+    $.ajax('https://jsonbin.org/me/timer', {
+        'headers': {
+            'authorization': 'token d2cbdd74-fc2a-4d39-8dc9-33479151cebd'
+        },
+    }).done(console.log);
+    </script>
+</body>
+
+</html>
