@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Html source translator</title>
+    <title>API Client</title>
     <link rel="stylesheet" href="//cdn.webix.com/edge/webix.css" type="text/css">
     <script src="//cdn.webix.com/edge/webix.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.11.0/js-yaml.min.js"></script>
@@ -24,64 +24,7 @@
     view: multiview
     id: pages
     cells:
-    - id: step1
-      rows:
-      - view: template
-        type: header
-        template: <span class="no-translate" data-text="Шаг 1 из 3. Ввод текста для перевода"></span>
-      - view: template
-        autoheight: on
-        template: <span class="no-translate" data-text="Вставьте html-исходники в поле ввода"></span>
-      - view: textarea
-        id: original
-        height: 400
-      - cols:
-        - fillspace: true
-        - view: button
-          type: iconButton
-          icon: arrow-right
-          width: 40
-          'on':
-            onItemClick: func:> step2
-    - id: step2
-      rows:
-      - view: template
-        type: header
-        template: <span class="no-translate" data-text="Шаг 2 из 3. Выполнить перевод"></span>
-      - view: template
-        autoheight: on
-        template: <span class="no-translate" data-text="Переведите страницу средствами браузера."></span> <b class="no-translate" data-text="Обязательно"></b> <span class="no-translate" data-text="дождитесь окончания перевода"></span>
-      - view: template
-        id: textForTranslate
-        template: <div id="text-for-translate">#original#</div>
-        autoheight: true
-      - cols:
-        - fillspace: true
-        - view: button
-          type: iconButton
-          icon: arrow-right
-          width: 40
-          'on':
-            onItemClick: func:> step3
-    - id: step3
-      rows:
-      - view: template
-        type: header
-        template: <span class="no-translate" data-text="Шаг 3 из 3. Забрать результат"></span>
-      - view: template
-        autoheight: on
-        template: <span class="no-translate" data-text="Скопируйте html-исходники из поля ввода"></span>
-      - id: result
-        view: textarea
-        height: 400
-      - cols:
-        - fillspace: true
-        - view: button
-          type: iconButton
-          icon: angle-double-left
-          width: 40
-          'on':
-            onItemClick: func:> step1
+    - id: settings
   </script>
   <div id="container"></div>
 </body>
