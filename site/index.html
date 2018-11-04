@@ -32,6 +32,17 @@
       - view: text
         id: token
         label: Token
+      - view: button
+        label: Начать
+    - id: start
+      rows:
+      - view: button
+        label: Продукты
+        on:
+        - onClick: func:> products
+    - id: products
+      view: datatable
+
   </script>
   <div id="container"></div>
 </body>
