@@ -51,6 +51,8 @@
     - view: multiview
       id: pages
       cells:
+      - id: visitor
+
       - id: settings
         rows:
         - view: text
@@ -187,8 +189,6 @@
             body:
               id: card
               view: form
-              on:
-                onSubmit: func:> payment
               elements:
               - view: text
                 id: cardNumber

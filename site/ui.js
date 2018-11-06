@@ -69,7 +69,7 @@
             },
             payment: function(view, ev) {
                 var order = $$('order').getValues();
-                var card = this.getValues();
+                var card = $$('card').getValues();
                 card.expiry_year = '20' + card.expiry_year
                 var data = {
                     "total": order.total_incl_tax,
