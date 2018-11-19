@@ -2,7 +2,8 @@
     var url = '';
     var token = '';
     var ui_obj = null;
-    var ajax = null;
+    var billing_ajax = null;
+    var paraClient = null;
 
     function getResults(data) {
         return data.json().results;
@@ -17,7 +18,7 @@
             products: function() {
                 $$('products').load(
                     function() {
-                        return ajax.get(url + '/api/products/partner/main/').then(getResults);
+                        return billing_ajax.get(url + '/api/products/partner/main/').then(getResults);
                     });
                 $$('tariffs').clearAll();
             },
@@ -26,8 +27,9 @@
             },
             start: function() {
                 $$('pages').setValue('start');
-                setToken($$('token').getValue(token));
-                webix.storage.local.put('token', token);
+                var ParaClient = require('para-client-js');
+                paraClient = new ParaClient('app:gimntut', '2vw6IlOqja9oKOAwbPGwCgzXQgVK9bh0sPwhx3XIe5fY1CL3gM9pXQ==');
+                paraClient.read()
             },
             afterLoad: function() {
                 $$('pages').setValue('productsPage');
@@ -50,7 +52,7 @@
             clickAddToBasket: function(event, cell) {
                 var tariff = this.getItem(cell.row);
                 $$('basket').load(function() {
-                    return ajax.post(url + '/api/basket/add-product/', {
+                    return billing_ajax.post(url + '/api/basket/add-product/', {
                         url: tariff.url,
                         quantity: 1
                     }).then(getData);
@@ -61,7 +63,7 @@
             clickCheckout: function() {
                 var basket = this.getValues();
                 $$('order').load(function() {
-                    return ajax.post(url + '/api/checkout/', {
+                    return billing_ajax.post(url + '/api/checkout/', {
                         basket: basket.url,
                     }).then(getData);
                 });
@@ -81,7 +83,7 @@
                             "card": card
                         }
                     }
-                }
+                };
                 webix.ajax().headers({
                     "Authorization": 'Token ' + token,
                 }).post(url + order.payment_url, data, function() {
@@ -89,6 +91,10 @@
                     $$('pages').setValue('links');
                 });
                 $$('pages').setValue('loading');
+            },
+            changeInput: function(newv, oldv) {
+                var name = this.config.id;
+                webix.storage.local.put(name, newv);
             },
             changeUrl: function(newv, oldv) {
                 url = newv.replace(/\/$/, '');
@@ -100,7 +106,7 @@
 
     function setToken(newToken) {
         token = newToken;
-        ajax = webix.ajax().headers({
+        billing_ajax = webix.ajax().headers({
             "Authorization": 'Token ' + token,
             "Content-type": "application/json"
         });

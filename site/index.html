@@ -7,32 +7,15 @@
     <link rel="stylesheet" href="//cdn.webix.com/edge/webix.css" type="text/css">
     <script src="//cdn.webix.com/edge/webix.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.11.0/js-yaml.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/nunjucks/3.0.1/nunjucks.min.js"></script>
     <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/paraio.js" type="text/javascript"></script>
     <script src="/webix-ext.js" type="text/javascript"></script>
     <script src="/ui.js" type="text/javascript"></script>
 </head>
 
 <body>
-  <style type="text/css">
-    span.btn {
-      padding: 2px;
-      border: gray 1px solid;
-      background-color: green;
-      color: white;
-      min-width: 30px;
-      cursor: pointer;
-      display: inline-block;
-      text-align: center;
-    }
-    .webix_cell p {
-      margin: 0;
-    }
-    .info th {
-      text-align: left;
-    }
-    .info td, .info th {
-      padding: 2px 6px;
-    }
+  <style id="styles" type="text/css">
   </style>
   <div id="container"></div>
   <script id="ui" language="text/yaml">
@@ -40,205 +23,60 @@
     rows:
     - view: toolbar
       cols:
-        - view: button
-          label: Настройки
-          on:
-            onItemClick: func:> settings
-        - view: button
-          label: Начало
-          on:
-            onItemClick: func:> home
+      - view: button
+        label: Настройки
+        'on':
+          onItemClick: func:> settings
+      - view: button
+        label: Начало
+        'on':
+          onItemClick: func:> home
     - view: multiview
       id: pages
       cells:
       - id: visitor
-
       - id: settings
         rows:
+        - template: "<strong>Страница приватных настроек</strong><br>
+          <small>Настройки храняться в браузере и не покидают компьютера</small>"
+          autoheight: true
+        - type: section
+          template: "Биллинг"
         - view: text
           id: url
           label: URL
           placeholder: http://localhost:8000
-          on:
+          'on':
             onChange: func:> changeUrl
         - view: text
           id: token
           label: Token
-        - template: "{obj.url?<a href='#url#/admin/authtoken/token/' target='_blank'>Страница токенов</a>:}"
+          'on':
+            onChange: func:> changeInput
+        - template: "{obj.url?<a href='#url#/admin/authtoken/token/' target='_blank'>Страница
+            токенов</a>:}"
           id: tokenAdmin
           autoheight: true
           type: clean
+        - type: section
+          template: "Хранилище страниц"
+        - view: text
+          id: access_key
+          label: Access key
+          labelPosition: top
+          'on':
+            onChange: func:> changeInput
+        - view: text
+          id: secret_key
+          label: Secret key
+          labelPosition: top
+          'on':
+            onChange: func:> changeInput
         - view: button
           label: На главную страницу
-          on:
+          'on':
             onItemClick: func:> start
       - id: start
-        rows:
-        - view: button
-          label: Информация о текущем пользователе
-          on:
-            onItemClick: func:> visitor
-        - view: button
-          label: Продукты доступные текущему пользователю
-          on:
-            onItemClick: func:> products
-      - id: productsPage
-        rows:
-        - type: header
-          template: Продукты <small>Выберите один из продуктов</small>
-        - id: products
-          view: datatable
-          # autowidth: true
-          autoheight: true
-          select: row
-          on:
-            onAfterLoad: func:> afterLoad
-            onAfterSelect: func:> selectProduct
-          columns:
-            - header: id
-              id: id
-              template: '#id#'
-            - header: Описание
-              id: title
-              template: '#title#'
-              fillspace: true
-            - header: Действия
-              id: actions
-              adjust: true
-              template: |
-                <span class="btn info" title="Информация о продукте">ℹ️</span>
-          onClick:
-            info: func:> clickProductInfo
-        - height: 10
-        - type: header
-          template: Тарифы
-        - id: tariffs
-          view: datatable
-          autoConfig: true
-          autoheight: true
-          minHeight: 100
-          columns:
-            - header: id
-              id: id
-              template: '#id#'
-            - id: title
-              header: Название
-              template: '#title#'
-              fillspace: true
-            - id: status
-              header: Статус
-              template: '#status#'
-              adjust: true
-            - id: price
-              header: Цена
-              template: '#price.incl_tax# #price.currency#'
-              adjust: true
-            - id: actions
-              header: Действия
-              adjust: true
-              template: |
-                <span class="btn basket" title="Положить в корзину">🛒</span>
-          onClick:
-            basket: func:> clickAddToBasket
-      - id: basket
-        autoheight: true
-        template: |
-          <table class="info">
-            <tr><th>id</th><td>#id#</td></tr>
-            <tr><th>owner</th><td>#owner#</td></tr>
-            <tr><th>status</th><td>#status#</td></tr>
-            <tr><th>lines</th><td>#lines#</td></tr>
-            <tr><th>url</th><td>#url#</td></tr>
-            <tr><th>total_excl_tax</th><td>#total_excl_tax#</td></tr>
-            <tr><th>total_excl_tax_excl_discounts</th><td>#total_excl_tax_excl_discounts#</td></tr>
-            <tr><th>total_incl_tax</th><td>#total_incl_tax#</td></tr>
-            <tr><th>total_incl_tax_excl_discounts</th><td>#total_incl_tax_excl_discounts#</td></tr>
-            <tr><th>total_tax</th><td>#total_tax#</td></tr>
-            <tr><th>currency</th><td>#currency#</td></tr>
-            <tr><th>voucher_discounts</th><td>#voucher_discounts#</td></tr>
-            <tr><th>offer_discounts</th><td>#offer_discounts#</td></tr>
-            <tr><th>is_tax_known</th><td>#is_tax_known#</td></tr>
-          </table>
-          <span class="btn checkout">🖊️ Оформить заказ️</span>
-        onClick:
-          checkout: func:> clickCheckout
-      - id: checkoutPage
-        rows:
-        - id: order
-          autoheight: true
-          template: |
-            <table class="info">
-              <tr><th>number</th><td>#number#</td></tr>
-              <tr><th>basket</th><td>#basket#</td></tr>
-              <tr><th>url</th><td>#url#</td></tr>
-              <tr><th>lines</th><td>#lines#</td></tr>
-              <tr><th>owner</th><td>#owner#</td></tr>
-              <tr><th>billing_address</th><td>#billing_address#</td></tr>
-              <tr><th>currency</th><td>#currency#</td></tr>
-              <tr><th>total_incl_tax</th><td>#total_incl_tax#</td></tr>
-              <tr><th>total_excl_tax</th><td>#total_excl_tax#</td></tr>
-              <tr><th>shipping_incl_tax</th><td>#shipping_incl_tax#</td></tr>
-              <tr><th>shipping_excl_tax</th><td>#shipping_excl_tax#</td></tr>
-              <tr><th>shipping_address</th><td>#shipping_address#</td></tr>
-              <tr><th>shipping_method</th><td>#shipping_method#</td></tr>
-              <tr><th>shipping_code</th><td>#shipping_code#</td></tr>
-              <tr><th>status</th><td>#status#</td></tr>
-              <tr><th>guest_email</th><td>#guest_email#</td></tr>
-              <tr><th>date_placed</th><td>#date_placed#</td></tr>
-              <tr><th>payment_url</th><td>#payment_url#</td></tr>
-              <tr><th>offer_discounts</th><td>#offer_discounts#</td></tr>
-              <tr><th>voucher_discounts</th><td>#voucher_discounts#</td></tr>
-            </table>
-        - view: tabview
-          cells:
-          - header: "Банковская карта"
-            body:
-              id: card
-              view: form
-              elements:
-              - view: text
-                id: cardNumber
-                name: number
-                labelPosition: top
-                label: Номер карты
-                value: '4111111111111111'
-              - cols:
-                - view: text
-                  id: month
-                  name: expiry_month
-                  labelPosition: top
-                  label: Месяц
-                  value: 12
-                - view: text
-                  id: year
-                  name: expiry_year
-                  labelPosition: top
-                  label: Год
-                  value: 22
-                - view: text
-                  id: cvv
-                  name: csc
-                  labelPosition: top
-                  label: CVV
-                  value: 123
-                - view: button
-                  value: Купить
-                  type: form
-                  on:
-                    onItemClick: func:> payment
-          - header: "Сохраненое платёжное средство"
-            body:
-              id: sources
-              template: Для этой функции нет API
-      - id: links
-        template: |
-          <a href="#url#/admin/customer/access/" target="_blank">Доступы</a><br>
-          <a href="#url#/admin/yakassa/operationdetails/" target="_blank">Детали платежей</a><br>
-          <a href="#url#/admin/order/order/" target="_blank">Заказы</a><br>
-          <a href="#url#/admin/customer/purchase/" target="_blank">Покупки</a><br>
-      - id: loading
-        template: <h1>Подождите, идёт загрузка...</h1>
-
   </script>
 
   <div id="container"></div>

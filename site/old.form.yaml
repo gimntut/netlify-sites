@@ -1,0 +1,193 @@
+---
+container: container
+rows:
+- view: toolbar
+  cols:
+  - view: button
+    label: Настройки
+    'true':
+      onItemClick: func:> settings
+  - view: button
+    label: Начало
+    'true':
+      onItemClick: func:> home
+- view: multiview
+  id: pages
+  cells:
+  - id: visitor
+  - id: settings
+    rows:
+    - view: text
+      id: url
+      label: URL
+      placeholder: http://localhost:8000
+      'true':
+        onChange: func:> changeUrl
+    - view: text
+      id: token
+      label: Token
+    - template: "{obj.url?<a href='#url#/admin/authtoken/token/' target='_blank'>Страница
+        токенов</a>:}"
+      id: tokenAdmin
+      autoheight: true
+      type: clean
+    - view: button
+      label: На главную страницу
+      'true':
+        onItemClick: func:> start
+  - id: start
+    rows:
+    - view: button
+      label: Информация о текущем пользователе
+      'true':
+        onItemClick: func:> visitor
+    - view: button
+      label: Продукты доступные текущему пользователю
+      'true':
+        onItemClick: func:> products
+  - id: productsPage
+    rows:
+    - type: header
+      template: Продукты <small>Выберите один из продуктов</small>
+    - id: products
+      view: datatable
+      autoheight: true
+      select: row
+      'true':
+        onAfterLoad: func:> afterLoad
+        onAfterSelect: func:> selectProduct
+      columns:
+      - header: id
+        id: id
+        template: "#id#"
+      - header: Описание
+        id: title
+        template: "#title#"
+        fillspace: true
+      - header: Действия
+        id: actions
+        adjust: true
+        template: '<span class="btn info" title="Информация о продукте">ℹ️</span>
+
+'
+      onClick:
+        info: func:> clickProductInfo
+    - height: 10
+    - type: header
+      template: Тарифы
+    - id: tariffs
+      view: datatable
+      autoConfig: true
+      autoheight: true
+      minHeight: 100
+      columns:
+      - header: id
+        id: id
+        template: "#id#"
+      - id: title
+        header: Название
+        template: "#title#"
+        fillspace: true
+      - id: status
+        header: Статус
+        template: "#status#"
+        adjust: true
+      - id: price
+        header: Цена
+        template: "#price.incl_tax# #price.currency#"
+        adjust: true
+      - id: actions
+        header: Действия
+        adjust: true
+        template: "<span class=\"btn basket\" title=\"Положить в корзину\">\U0001F6D2</span>\n"
+      onClick:
+        basket: func:> clickAddToBasket
+  - id: basket
+    autoheight: true
+    template: "<table class=\"info\">\n  <tr><th>id</th><td>#id#</td></tr>\n  <tr><th>owner</th><td>#owner#</td></tr>\n
+      \ <tr><th>status</th><td>#status#</td></tr>\n  <tr><th>lines</th><td>#lines#</td></tr>\n
+      \ <tr><th>url</th><td>#url#</td></tr>\n  <tr><th>total_excl_tax</th><td>#total_excl_tax#</td></tr>\n
+      \ <tr><th>total_excl_tax_excl_discounts</th><td>#total_excl_tax_excl_discounts#</td></tr>\n
+      \ <tr><th>total_incl_tax</th><td>#total_incl_tax#</td></tr>\n  <tr><th>total_incl_tax_excl_discounts</th><td>#total_incl_tax_excl_discounts#</td></tr>\n
+      \ <tr><th>total_tax</th><td>#total_tax#</td></tr>\n  <tr><th>currency</th><td>#currency#</td></tr>\n
+      \ <tr><th>voucher_discounts</th><td>#voucher_discounts#</td></tr>\n  <tr><th>offer_discounts</th><td>#offer_discounts#</td></tr>\n
+      \ <tr><th>is_tax_known</th><td>#is_tax_known#</td></tr>\n</table>\n<span class=\"btn
+      checkout\">\U0001F58A️ Оформить заказ️</span>\n"
+    onClick:
+      checkout: func:> clickCheckout
+  - id: checkoutPage
+    rows:
+    - id: order
+      autoheight: true
+      template: |
+        <table class="info">
+          <tr><th>number</th><td>#number#</td></tr>
+          <tr><th>basket</th><td>#basket#</td></tr>
+          <tr><th>url</th><td>#url#</td></tr>
+          <tr><th>lines</th><td>#lines#</td></tr>
+          <tr><th>owner</th><td>#owner#</td></tr>
+          <tr><th>billing_address</th><td>#billing_address#</td></tr>
+          <tr><th>currency</th><td>#currency#</td></tr>
+          <tr><th>total_incl_tax</th><td>#total_incl_tax#</td></tr>
+          <tr><th>total_excl_tax</th><td>#total_excl_tax#</td></tr>
+          <tr><th>shipping_incl_tax</th><td>#shipping_incl_tax#</td></tr>
+          <tr><th>shipping_excl_tax</th><td>#shipping_excl_tax#</td></tr>
+          <tr><th>shipping_address</th><td>#shipping_address#</td></tr>
+          <tr><th>shipping_method</th><td>#shipping_method#</td></tr>
+          <tr><th>shipping_code</th><td>#shipping_code#</td></tr>
+          <tr><th>status</th><td>#status#</td></tr>
+          <tr><th>guest_email</th><td>#guest_email#</td></tr>
+          <tr><th>date_placed</th><td>#date_placed#</td></tr>
+          <tr><th>payment_url</th><td>#payment_url#</td></tr>
+          <tr><th>offer_discounts</th><td>#offer_discounts#</td></tr>
+          <tr><th>voucher_discounts</th><td>#voucher_discounts#</td></tr>
+        </table>
+    - view: tabview
+      cells:
+      - header: Банковская карта
+        body:
+          id: card
+          view: form
+          elements:
+          - view: text
+            id: cardNumber
+            name: number
+            labelPosition: top
+            label: Номер карты
+            value: '4111111111111111'
+          - cols:
+            - view: text
+              id: month
+              name: expiry_month
+              labelPosition: top
+              label: Месяц
+              value: 12
+            - view: text
+              id: year
+              name: expiry_year
+              labelPosition: top
+              label: Год
+              value: 22
+            - view: text
+              id: cvv
+              name: csc
+              labelPosition: top
+              label: CVV
+              value: 123
+            - view: button
+              value: Купить
+              type: form
+              'true':
+                onItemClick: func:> payment
+      - header: Сохраненое платёжное средство
+        body:
+          id: sources
+          template: Для этой функции нет API
+  - id: links
+    template: |
+      <a href="#url#/admin/customer/access/" target="_blank">Доступы</a><br>
+      <a href="#url#/admin/yakassa/operationdetails/" target="_blank">Детали платежей</a><br>
+      <a href="#url#/admin/order/order/" target="_blank">Заказы</a><br>
+      <a href="#url#/admin/customer/purchase/" target="_blank">Покупки</a><br>
+  - id: loading
+    template: "<h1>Подождите, идёт загрузка...</h1>"
